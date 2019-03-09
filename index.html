@@ -1,0 +1,102 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Robocon 2019 Timer</title>
+
+  <script language="javascript" type="text/javascript" src="sketch.js"></script>
+  <script language="javascript" type="text/javascript" src="timer.js"></script>
+  <script language="javascript" type="text/javascript" src="Team.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body onload="setup()" >
+  <!-- onkeydown="keyPressed(event)" -->
+  <div class="row no-gutters">
+    <div class="col">
+      <div class="red-field">
+        <div class="team-scoring">
+          <p class="team-name"></p>
+          <p class="team-score" id="Score">0</p>
+          <div class="team-retryViolation container">
+            <div class="row">
+              <p class="col">R:<span id="retry-time">0</span></p>
+              <p class="col">V:<span id="violation-time">0</span></p>
+            </div>
+            <div class="row">
+              <button id="retry-btn" onclick="retryBtnOnClick()">Start Retry</button>
+              <button onclick="violationBtnOnClick()">Violation</button>
+            </div>
+          </div>
+        </div>
+        <div class="spacer"></div>
+        <p class="robot-header">Messager Robot 1</p>
+        <div class="MR-Btn container">
+          <div class="row">
+            <button class="col" id="MR1Btn1" onclick="MR1Btn1OnClick()">Shagai</button>
+            <button class="col" id="MR1Btn2" onclick="MR1Btn2OnClick()">Camal</button>
+            <button class="col" id="MR1Btn3" onclick="MR1Btn3OnClick()">Horse</button>
+          </div>
+        </div>
+        <div class="spacer"></div>
+        <p class="robot-header">Messager Robot 2</p>
+        <div class="MR-Btn container">
+          <div class="row">
+            <button class="col" id="MR2Btn" onclick="MR2BtnOnClick()">Line 2</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="timer">
+        <p><span id="timer-minute">00:</span><span id="timer-second">00</span><span id="timer-millis">.000</span></p>
+        <div class="container">
+          <div class="row">
+            <button class="col" id="start-btn" onclick="startPauseBtnOnClick()">Start</button>
+            <button class="col" id="reset-btn" onclick="stopClearBtnOnClick()">Reset</button>
+          </div>
+        </div>
+        <div class="timer-setting container">
+          <div class="row">
+            <p class="col">
+              <input type="checkbox" id="prep-time" checked />
+              <label for="prep-time">1 minute preparation time</label>&ensp;&ensp;&ensp;
+              Showing:&ensp;
+              <input type="radio" name="time-format" value="MSm" id="MSm" checked />
+              <label for="MSm">MSm</label>&ensp;
+              <input type="radio" name="time-format" value="MS" id="MS" />
+              <label for="MS">MS</label>&ensp;
+              <input type="radio" name="time-format" value="S" id="S" />
+              <label for="S">S</label>
+            </p>
+          </div>
+          <div class="row">
+            <p class="col">
+              <input type="radio" name="field" value="red" id="red-field" checked="checked"/>
+              <label for="red-field">Red Field</label>&ensp;
+              <input type="radio" name="field" value="blue" id="blue-field"/>
+              <label for="blue-field">Blue Field</label>&ensp;
+              <input type="text" placeholder="Team Name" oninput="updateTeamName(this.value)"/>
+            </p>
+          </div>
+        </div>
+        <div class="history table-responsive">
+          <table class="table table-hover table-sm table-fixed">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Event</th>
+              </tr>
+            </thead>
+            <tbody id="history">
+            </tbody>
+          </table>
+        </div>
+        <button id="undo" onclick="undoBtnOnClick()">Undo</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
