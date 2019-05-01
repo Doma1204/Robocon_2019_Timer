@@ -1,173 +1,173 @@
 body {
-  overflow: hidden;
+	overflow: hidden;
 }
 
 .red-field, .blue-field, .timer {
-  height: 100vh;
-  width: 100%;
+	height: 100vh;
+	width: 100%;
 }
 
 .red-field, .blue-field p {
-  color: white;
+	color: white;
 }
 
 .red-field {
-  background-image: linear-gradient(#e60000, #AA0000);
+	background-image: linear-gradient(#e60000, #AA0000);
 }
 
 .blue-field {
-  background-image: linear-gradient(#1e5ac8, #3214a5);
+	background-image: linear-gradient(#1e5ac8, #3214a5);
 }
 
 .spacer {
-  padding: 2vh 0 2vh 0;
+	padding: 2vh 0 2vh 0;
 }
 
 .team-name {
-  height: 5vh;
-  font-size: 5vh;
+	height: 5vh;
+	font-size: 5vh;
 }
 
 .team-score {
-  height: 27vh;
-  font-size: 22vh;
+	height: 27vh;
+	font-size: 22vh;
 }
 
 .team-retryViolation p {
-  font-size: 4vh;
+	font-size: 4vh;
 }
 
 .team-retryViolation button {
-  background-color: transparent;
-  border: 0.3vh solid #E6E6E6;
-  border-radius: 3vh;
-  margin: 0 4% 0 4%;
-  height: 5vh;
-  width: 42%;
-  color: #E6E6E6;
-  font-size: 3vh;
+	background-color: transparent;
+	border: 0.3vh solid #E6E6E6;
+	border-radius: 3vh;
+	margin: 0 4% 0 4%;
+	height: 5vh;
+	width: 42%;
+	color: #E6E6E6;
+	font-size: 3vh;
 }
 
 .robot-header {
-  margin: 2vh 0 2vh 0;
-  font-size: 3.5vh;
+	margin: 2vh 0 2vh 0;
+	font-size: 3.5vh;
 }
 
 .MR-Btn button {
-  background-color: transparent;
-  border: 0.3vh solid #E6E6E6;
-  border-radius: 3vh;
-  margin: 0 3vh 0 3vh;
-  height: 7vh;
-  color: #E6E6E6;
-  font-size: 4vh;
-  width: 90%;
+	background-color: transparent;
+	border: 0.3vh solid #E6E6E6;
+	border-radius: 3vh;
+	margin: 0 3vh 0 3vh;
+	height: 7vh;
+	color: #E6E6E6;
+	font-size: 4vh;
+	width: 90%;
 }
 
 #timer-minute {
-  font-size: 27vh;
+	font-size: 27vh;
 }
 
 #timer-second {
-  font-size: 27vh;
+	font-size: 27vh;
 }
 
 #timer-millis {
-  font-size: 6vh;
+	font-size: 6vh;
 }
 
 #timer-minute, #timer-second, #timer-millis {
-  font-family: Consolas;
+	font-family: Consolas;
 }
 
 .timer button {
-  background-color: transparent;
-  border: 0.3vh solid black;
-  border-radius: 3vh;
-  height: 5vh;
-  font-size: 3vh;
-  width: 30%;
-  margin: 0 9% 0 9%;
+	background-color: transparent;
+	border: 0.3vh solid black;
+	border-radius: 3vh;
+	height: 5vh;
+	font-size: 3vh;
+	width: 30%;
+	margin: 0 9% 0 9%;
 }
 
 .timer-setting {
-  font-size: 2vh;
-  margin-top: 1vh;
+	font-size: 2vh;
+	margin-top: 1vh;
 }
 
 .timer-setting input[type='checkbox'] {
-    width: 1.7vh;
-    height: 1.7vh;
+		width: 1.7vh;
+		height: 1.7vh;
 }
 
 .timer-setting input[type='radio'] {
-  width: 1.7vh;
-  height: 1.7vh;
+	width: 1.7vh;
+	height: 1.7vh;
 }
 
 .timer-setting input[type='text'] {
-  width: 30%;
-  height: 2.5vh;
-  border: none;
-  border-bottom: 1px solid #DDDDDD;
-  font-size: 2vh;
-  color: #888888;
+	width: 30%;
+	height: 2.5vh;
+	border: none;
+	border-bottom: 1px solid #DDDDDD;
+	font-size: 2vh;
+	color: #888888;
 }
 
 .history {
-  margin: 1vh 2% 1vh 2%;
-  width: 96%;
-  height: 37%;
-  border: 1px solid #DDDDDD;
+	margin: 1vh 2% 1vh 2%;
+	width: 96%;
+	height: 37%;
+	border: 1px solid #DDDDDD;
 }
 
 .history th{
-  font-size: 1.7vh;
-  color: #555555;
+	font-size: 1.7vh;
+	color: #555555;
 }
 
 .history th:nth-child(even) {
-  width: 80%;
+	width: 80%;
 }
 
 #undo {
-  margin: 0 2% 0 0;
-  width: 10%;
-  height: 3.5vh;
-  float: right;
-  font-size: 2vh;
-  border: 1px solid black;
-  border-radius: 3px;
+	margin: 0 2% 0 0;
+	width: 10%;
+	height: 3.5vh;
+	float: right;
+	font-size: 2vh;
+	border: 1px solid black;
+	border-radius: 3px;
 }
 
 input, button:focus {
-  outline: none;
+	outline: none;
 }
 
 button {
-  text-align: center;
+	text-align: center;
 }
 
 button:active {
-  border: 0.3vh solid gray;
-  color: gray;
+	border: 0.3vh solid gray;
+	color: gray;
 }
 
 button:disabled {
-  border: 0.3vh solid gray;
-  color: gray;
+	border: 0.3vh solid gray;
+	color: gray;
 }
 
 p {
-  margin: 0;
-  padding: 0;
-  text-align: center;
+	margin: 0;
+	padding: 0;
+	text-align: center;
 }
 
 .hide {
-  display: none;
+	display: none;
 }
 
 .disappear {
-  visibility: hidden;
+	visibility: hidden;
 }
