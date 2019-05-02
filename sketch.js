@@ -5,20 +5,6 @@ let isOneMinute = true;
 let a = [];
 
 function setup() {
-	timerText = document.getElementById("Timer");
-	startStopText = document.getElementById("StartBtn")
-	scoreText = document.getElementById("Score");
-	logText = document.getElementById("logText");
-	retryText = document.getElementById("retryBtn");
-
-	startPauseBtn = document.getElementById("startPauseBtn");
-	stopClearBtn = document.getElementById("stopClearBtn");
-
-	MR1Btn1 = document.getElementById("MR1Btn1");
-	MR1Btn2 = document.getElementById("MR1Btn2");
-	MR1Btn3 = document.getElementById("MR1Btn3");
-	MR2Btn = document.getElementById("MR2Btn");
-
 	$("input[name*='time-format']").click(updateTimeFormat);
 	$("input[name*='field']").click(updateFieldColor);
 	$("#prep-time").click(function () {
@@ -29,7 +15,6 @@ function setup() {
 
 	timer = new Timer();
 	team = new Team();
-	timer.setTime(1);
 	timer.setTimerCallback(writeTimer);
 	timer.setTimerEndCallback(timerEnd);
 
@@ -37,11 +22,12 @@ function setup() {
 }
 
 function reset() {
-	// $("#start-btn").attr("disabled", "false");
 	document.getElementById("start-btn").disabled = false;
 	$(".timer-setting").removeClass("disappear");
-	$("#history").empty();
-	timer.resetTimer();
+    $("#history").empty();
+    isOneMinute = $("#prep-time").prop("checked");
+    timer.resetTimer();
+    timer.setTime(isOneMinute ? 1 : 3);
 	writeTimer(timer);
 	team.reset();
 	updateMR1Btn();
