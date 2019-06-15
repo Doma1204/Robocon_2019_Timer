@@ -7,6 +7,7 @@
 	<script language="javascript" type="text/javascript" src="sketch.js"></script>
 	<script language="javascript" type="text/javascript" src="timer.js"></script>
 	<script language="javascript" type="text/javascript" src="Team.js"></script>
+	<script language="javascript" type="text/javascript" src="history.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -17,7 +18,7 @@
 <body onload="setup()">
 	<div class="row no-gutters">
 		<div class="col">
-			<div class="red-field">
+			<div class="red-field" id="left-field">
 				<div class="team-scoring">
 					<p class="team-name"></p>
 					<p class="team-score" id="Score">0</p>
@@ -27,8 +28,8 @@
 							<p class="col">V:<span id="violation-time">0</span></p>
 						</div>
 						<div class="row">
-							<button id="retry-btn" onclick="retryBtnOnClick()">Start Retry</button>
-							<button onclick="violationBtnOnClick()">Violation</button>
+							<button id="retry-btn" onclick="retryBtnOnClick('#left-field')">Start Retry</button>
+							<button onclick="violationBtnOnClick('#left-field')">Violation</button>
 						</div>
 					</div>
 				</div>
@@ -36,24 +37,24 @@
 				<p class="robot-header">Messager Robot 1</p>
 				<div class="MR-Btn container">
 					<div class="row">
-						<button class="col" id="MR1Btn1" onclick="MR1Btn1OnClick()">Shagai</button>
-						<button class="col" id="MR1Btn2" onclick="MR1Btn2OnClick()">Camal</button>
-						<button class="col" id="MR1Btn3" onclick="MR1Btn3OnClick()">Horse</button>
+						<button class="col" id="MR1Btn1" onclick="MR1Btn1OnClick('#left-field')">Shagai</button>
+						<button class="col" id="MR1Btn2" onclick="MR1Btn2OnClick('#left-field')">Camal</button>
+						<button class="col" id="MR1Btn3" onclick="MR1Btn3OnClick('#left-field')">Horse</button>
 					</div>
 				</div>
 				<div class="spacer"></div>
 				<p class="robot-header">Messager Robot 2</p>
 				<div class="MR-Btn container">
 					<div class="row">
-						<button class="col" id="MR2Btn" onclick="MR2BtnOnClick()">Line 2</button>
+						<button class="col" id="MR2Btn" onclick="MR2BtnOnClick('#left-field')">Line 2</button>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="col">
 			<div class="timer">
-				<p><span id="timer-minute">00:</span><span id="timer-second">00</span><span
-						id="timer-millis">.000</span></p>
+				<tt><span id="timer-minute">00:</span><span id="timer-second">00</span><span
+						id="timer-millis">.000</span></tt>
 				<div class="container">
 					<div class="row">
 						<button class="col" id="start-btn" onclick="startPauseBtnOnClick()">Start</button>
@@ -77,28 +78,82 @@
 					<div class="row">
 						<p class="col">
 							<input type="radio" name="field" value="red" id="red-field" checked="checked" />
-							<label for="red-field">Red Field</label>&ensp;
+							<label for="red-field">Red Blue</label>&ensp;
 							<input type="radio" name="field" value="blue" id="blue-field" />
-							<label for="blue-field">Blue Field</label>&ensp;
-							<input type="text" placeholder="Team Name" oninput="updateTeamName(this.value)" />
+							<label for="blue-field">Blue Red</label>&ensp;
+							<!-- <input type="text" placeholder="Team Name" oninput="updateTeamName(this.value)" /> -->
 						</p>
 					</div>
 				</div>
-				<div class="history table-responsive">
-					<table class="table table-hover table-sm table-fixed">
-						<thead>
-							<tr>
-								<th>Time</th>
-								<th>Event</th>
-							</tr>
-						</thead>
-						<tbody id="history">
-						</tbody>
-					</table>
+				<div class="row" style="height: 37%">
+					<div class="col left-field">
+						<div class="history table-responsive">
+							<table class="table table-hover table-sm table-fixed">
+								<thead>
+									<tr>
+										<th>Time</th>
+										<th>Event</th>
+									</tr>
+								</thead>
+								<tbody id="left-history">
+								</tbody>
+							</table>
+						</div>
+						<button id="undo" onclick="undoBtnOnClick('#left-field')">Undo</button>		
+					</div>
+					<div class="col right-field">
+						<div class="history table-responsive">
+							<table class="table table-hover table-sm table-fixed">
+								<thead>
+									<tr>
+										<th>Time</th>
+										<th>Event</th>
+									</tr>
+								</thead>
+								<tbody id="right-history">
+								</tbody>
+							</table>
+						</div>
+						<button id="undo" onclick="undoBtnOnClick('#right-field')">Undo</button>		
+					</div>
 				</div>
-				<button id="undo" onclick="undoBtnOnClick()">Undo</button>
 			</div>
 		</div>
+		<div class="col">
+			<div class="blue-field" id="right-field">
+				<div class="team-scoring">
+					<p class="team-name"></p>
+					<p class="team-score" id="Score">0</p>
+					<div class="team-retryViolation container">
+						<div class="row">
+							<p class="col">R:<span id="retry-time">0</span></p>
+							<p class="col">V:<span id="violation-time">0</span></p>
+						</div>
+						<div class="row">
+							<button id="retry-btn" onclick="retryBtnOnClick('#right-field')">Start Retry</button>
+							<button onclick="violationBtnOnClick('#right-field')">Violation</button>
+						</div>
+					</div>
+				</div>
+				<div class="spacer"></div>
+				<p class="robot-header">Messager Robot 1</p>
+				<div class="MR-Btn container">
+					<div class="row">
+						<button class="col" id="MR1Btn1" onclick="MR1Btn1OnClick('#right-field')">Shagai</button>
+						<button class="col" id="MR1Btn2" onclick="MR1Btn2OnClick('#right-field')">Camal</button>
+						<button class="col" id="MR1Btn3" onclick="MR1Btn3OnClick('#right-field')">Horse</button>
+					</div>
+				</div>
+				<div class="spacer"></div>
+				<p class="robot-header">Messager Robot 2</p>
+				<div class="MR-Btn container">
+					<div class="row">
+						<button class="col" id="MR2Btn" onclick="MR2BtnOnClick('#right-field')">Line 2</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 </body>
 

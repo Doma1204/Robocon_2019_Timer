@@ -218,5 +218,16 @@ class Team {
 			default: break;
 		}
 		return true;
-	}
+    }
+    
+    exportJSON() {
+        return {
+            field: this.field,
+            name: this.name,
+            score: this.score,
+            retry: this.numOfRetry,
+            violation: this.numOfViolation,
+            event: this.event
+        }
+    }
 }

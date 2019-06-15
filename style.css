@@ -117,7 +117,7 @@ body {
 .history {
 	margin: 1vh 2% 1vh 2%;
 	width: 96%;
-	height: 37%;
+	height: 100%;
 	border: 1px solid #DDDDDD;
 }
 
@@ -132,7 +132,7 @@ body {
 
 #undo {
 	margin: 0 2% 0 0;
-	width: 10%;
+	width: 50%;
 	height: 3.5vh;
 	float: right;
 	font-size: 2vh;

@@ -1,22 +1,33 @@
 let timer;
-let team;
+let startTime;
+let leftTeam, rightTeam;
+let leftField, rightField;
 let isOneMinute = true;
+let isOneMinutePass = false;
 
 let a = [];
+
+const RedField = "Red Field";
+const BlueField = "Blue Field";
 
 function setup() {
 	$("input[name*='time-format']").click(updateTimeFormat);
 	$("input[name*='field']").click(updateFieldColor);
 	$("#prep-time").click(function () {
 		isOneMinute = this.checked;
+		isOneMinutePass = !isOneMinute;
 		timer.setTime(isOneMinute ? 1 : 3);
 		writeTimer(timer);
 	});
 
 	timer = new Timer();
-	team = new Team();
+	leftTeam = new Team();
+	rightTeam = new Team();
 	timer.setTimerCallback(writeTimer);
-	timer.setTimerEndCallback(timerEnd);
+    timer.setTimerEndCallback(timerEnd);
+	
+	leftField = RedField;
+	rightField = BlueField;
 
 	reset();
 }
@@ -25,28 +36,38 @@ function reset() {
 	document.getElementById("start-btn").disabled = false;
 	$(".timer-setting").removeClass("disappear");
     $("#history").empty();
-    isOneMinute = $("#prep-time").prop("checked");
+    isOneMinutePass = !isOneMinute;
+    // isOneMinute = $("#prep-time").prop("checked");
     timer.resetTimer();
     timer.setTime(isOneMinute ? 1 : 3);
 	writeTimer(timer);
-	team.reset();
-	updateMR1Btn();
-	updateMR2Btn();
-	updateRetryBtn();
-	updateScore();
-	updateRetryNumber();
-	updateViolationNumber();
+	leftTeam.reset();
+	rightTeam.reset();
+	updateMR1Btn("#left-field");
+	updateMR2Btn("#left-field");
+	updateRetryBtn("#left-field");
+	updateScore("#left-field");
+	updateRetryNumber("#left-field");
+	updateViolationNumber("#left-field");
+	updateMR1Btn("#right-field");
+	updateMR2Btn("#right-field");
+	updateRetryBtn("#right-field");
+	updateScore("#right-field");
+	updateRetryNumber("#right-field");
+	updateViolationNumber("#right-field");
 }
 
 function startPauseBtnOnClick() {
 	if (timer.state == TimerState.START) {
 		$("#start-btn").html("Start");
-		timer.pauseTimer();
+        timer.pauseTimer();        
 	} else {
 		$("#start-btn").html("Pause");
 		$("#reset-btn").html("Stop");
 		timer.startTimer();
-		$(".timer-setting").addClass("disappear");
+        $(".timer-setting").addClass("disappear");
+        startTime = new Date();
+        // team.field = field;
 	}
 }
 
@@ -57,106 +78,121 @@ function stopClearBtnOnClick() {
 		$("#start-btn").attr("disabled", "true");
 		$("#start-btn").html("Start");
 		$("#reset-btn").html("Clear");
-		timer.stopTimer();
+        timer.stopTimer();
+        pushHistory();
 	}
 }
 
-function retryBtnOnClick() {
-	if (timer.state != TimerState.START || isOneMinute) return;
-	team.toggleRetry();
-	updateRetryBtn();
-	updateRetryNumber();
-	updateHistory();
-}
-
-function violationBtnOnClick() {
-	if (timer.state != TimerState.START || isOneMinute) return;
-	team.violation();
-	updateRetryBtn();
-	updateRetryNumber();
-	updateViolationNumber();
-	updateHistory();
-}
-
-function undoBtnOnClick() {
-	if (timer.state != TimerState.START || isOneMinute) return;
-	team.undo();
-	updateMR1Btn();
-	updateMR2Btn();
-	updateRetryBtn();
-	updateScore();
-	updateRetryNumber();
-	updateViolationNumber();
-	$("#history tr:last").remove();
-	$(".history").scrollTop(99999999);
-}
-
-function MR1Btn1OnClick() {
-	if (timer.state != TimerState.START || isOneMinute) return;
-	if (!team.completeTaskMR1(Shagai)) return;
-	updateMR1Btn();
-	updateMR2Btn();
-	updateScore();
-	updateHistory();
-}
-
-function MR1Btn2OnClick() {
-	if (timer.state != TimerState.START || isOneMinute) return;
-	if (!team.completeTaskMR1(Camel)) return;
-	updateMR2Btn();
-	updateScore();
-	updateHistory();
-}
-
-function MR1Btn3OnClick() {
-	if (timer.state != TimerState.START || isOneMinute) return;
-	if (!team.completeTaskMR1(Horse)) return;
-	updateMR2Btn();
-	updateScore();
-	updateHistory();
-}
-
-function MR2BtnOnClick() {
-	if (timer.state != TimerState.START || isOneMinute) return;
-	if (!team.completeTaskMR2()) return;
-	updateMR1Btn();
-	updateMR2Btn();
-	updateScore();
-	updateHistory();
-}
-
-function updateMR1Btn() {
-	if (team.curTaskMR1 == Shagai) {
-		$("#MR1Btn2").removeClass("hide");
-		$("#MR1Btn3").removeClass("hide");
+function retryBtnOnClick(fieldSelect) {
+	if (timer.state != TimerState.START || !isOneMinutePass) return;
+	if (fieldSelect == '#left-field') {
+		leftTeam.toggleRetry();
 	} else {
-		$("#MR1Btn2").addClass("hide");
-		$("#MR1Btn3").addClass("hide");
+		rightTeam.toggleRetry();
+	}
+	updateRetryBtn(fieldSelect);
+	updateRetryNumber(fieldSelect);
+	updateHistory(fieldSelect);
+}
+
+function violationBtnOnClick(fieldSelect) {
+	if (timer.state != TimerState.START || !isOneMinutePass) return;
+	if (fieldSelect == '#left-field') {
+		leftTeam.violation();
+	} else {
+		rightTeam.violation();
+	}
+	updateRetryBtn(fieldSelect);
+	updateRetryNumber(fieldSelect);
+	updateViolationNumber(fieldSelect);
+	updateHistory(fieldSelect);
+}
+
+function undoBtnOnClick(fieldSelect) {
+	if (timer.state != TimerState.START || !isOneMinutePass) return;
+	fieldSelect == "#left-field" ? leftTeam.undo() : rightTeam.undo();
+	updateMR1Btn(fieldSelect);
+	updateMR2Btn(fieldSelect);
+	updateRetryBtn(fieldSelect);
+	updateScore(fieldSelect);
+	updateRetryNumber(fieldSelect);
+	updateViolationNumber(fieldSelect);
+	if (fieldSelect == "#left-field") {
+		$("#left-history tr:last").remove();
+	} else {
+		$("#right-history tr:last").remove();
+	}
+	// $(fieldSelect == "#left-field" ? "#left-history" : "#right-history" + " tr:last").remove();
+	// $(".history").scrollTop(99999999);
+}
+
+function MR1Btn1OnClick(fieldSelect) {
+	if (timer.state != TimerState.START || !isOneMinutePass) return;
+	if (!(fieldSelect == "#left-field" ? leftTeam.completeTaskMR1(Shagai) : rightTeam.completeTaskMR1(Shagai))) return;
+	updateMR1Btn(fieldSelect);
+	updateMR2Btn(fieldSelect);
+	updateScore(fieldSelect);
+	updateHistory(fieldSelect);
+}
+
+function MR1Btn2OnClick(fieldSelect) {
+	if (timer.state != TimerState.START || !isOneMinutePass) return;
+	if (!(fieldSelect == "#left-field" ? leftTeam.completeTaskMR1(Camel) : rightTeam.completeTaskMR1(Camel))) return;
+	updateMR2Btn(fieldSelect);
+	updateScore(fieldSelect);
+	updateHistory(fieldSelect);
+}
+
+function MR1Btn3OnClick(fieldSelect) {
+	if (timer.state != TimerState.START || !isOneMinutePass) return;
+	if (!(fieldSelect == "#left-field" ? leftTeam.completeTaskMR1(Horse) : rightTeam.completeTaskMR1(Horse))) return;
+	updateMR2Btn(fieldSelect);
+	updateScore(fieldSelect);
+	updateHistory(fieldSelect);
+}
+
+function MR2BtnOnClick(fieldSelect) {
+	if (timer.state != TimerState.START || !isOneMinutePass) return;
+	if (!(fieldSelect == "#left-field" ? leftTeam.completeTaskMR2() : rightTeam.completeTaskMR2())) return;
+	updateMR1Btn(fieldSelect);
+	updateMR2Btn(fieldSelect);
+	updateScore(fieldSelect);
+	updateHistory(fieldSelect);
+}
+
+function updateMR1Btn(fieldSelect) {
+	if (fieldSelect == "#left-field" ? leftTeam.curTaskMR1 == Shagai : rightTeam.curTaskMR1 == Shagai) {
+		$(fieldSelect + " " + "#MR1Btn2").removeClass("hide");
+		$(fieldSelect + " " + "#MR1Btn3").removeClass("hide");
+	} else {
+		$(fieldSelect + " " + "#MR1Btn2").addClass("hide");
+		$(fieldSelect + " " + "#MR1Btn3").addClass("hide");
 	}
 
-	$("#MR1Btn1").html(team.curTaskMR1);
+	$(fieldSelect + " " + "#MR1Btn1").html(fieldSelect == "#left-field" ? leftTeam.curTaskMR1 : rightTeam.curTaskMR1);
 }
 
-function updateMR2Btn() {
-	$("#MR2Btn").html(team.curTaskMR2);
+function updateMR2Btn(fieldSelect) {
+	$(fieldSelect + " " + "#MR2Btn").html(fieldSelect == "#left-field" ? leftTeam.curTaskMR2 : rightTeam.curTaskMR2);
 }
 
-function updateScore() {
-	$("#Score").html(team.score);
+function updateScore(fieldSelect) {
+	$(fieldSelect + " " + "#Score").html(fieldSelect == "#left-field" ? leftTeam.score : rightTeam.score);
 }
 
-function updateRetryBtn() {
-	$("#retry-btn").html(team.onRetry ? "End Retry" : "Start Retry");
+function updateRetryBtn(fieldSelect) {
+	$(fieldSelect + " " + "#retry-btn").html((fieldSelect == "#left-field" ? leftTeam.onRetry : rightTeam.onRetry) ? "End Retry" : "Start Retry");
 }
 
-function updateRetryNumber() {
-	$("#retry-time").html(team.numOfRetry);
+function updateRetryNumber(fieldSelect) {
+	$(fieldSelect + " " + "#retry-time").html(fieldSelect == "#left-field" ? leftTeam.numOfRetry : rightTeam.numOfRetry);
 }
-function updateViolationNumber() {
-	$("#violation-time").html(team.numOfViolation);
+function updateViolationNumber(fieldSelect) {
+	$(fieldSelect + " " + "#violation-time").html(fieldSelect == "#left-field" ? leftTeam.numOfViolation : rightTeam.numOfViolation);
 }
 
-function updateHistory(oldEvent = undefined) {
+function updateHistory(fieldSelect, oldEvent = undefined) {
+	let team = fieldSelect == "#left-field" ? leftTeam : rightTeam;
 	let event = oldEvent == undefined ? team.event[team.event.length - 1] : oldEvent;
 	let eventString;
 	if (event.event == "Retry Start") {
@@ -179,21 +215,31 @@ function updateHistory(oldEvent = undefined) {
 		eventString = event.event;
 	}
 	eventString += " (Score: " + team.score + ")";
-	$("#history").append("<tr><th>" + event.timeString + "</th><th>" + eventString);
-	$(".history").scrollTop(99999999);
+	// $(fieldSelect == "#left-field" ? ".left-field" : ".right-field" + " " + "#history").append("<tr><th>" + event.timeString + "</th><th>" + eventString);
+	$(fieldSelect == "#left-field" ? "#left-history" : "#right-history").append("<tr><th>" + event.timeString + "</th><th>" + eventString);
+	// $(".history").scrollTop(99999999);
 }
 
 function updateTeamName(teamName) {
-	$(".team-name").html(teamName);
+    $(".team-name").html(teamName);
+    team.name = teamName;
 }
 
 function updateFieldColor() {
 	if ($("input[name='field']:checked").val() == "red") {
-		$(".blue-field").addClass("red-field");
-		$(".blue-field").removeClass("blue-field");
+        $("#left-field").removeClass("blue-field");
+		$("#left-field").addClass("red-field");
+        $("#right-field").removeClass("red-field");
+		$("#right-field").addClass("blue-field");
+		leftField = RedField;
+		rightField = BlueField;
 	} else {
-		$(".red-field").addClass("blue-field");
-		$(".red-field").removeClass("red-field");
+        $("#left-field").removeClass("red-field");
+		$("#left-field").addClass("blue-field");
+        $("#right-field").removeClass("blue-field");
+		$("#right-field").addClass("red-field");
+		leftField = BlueField;
+		rightField = RedField;
 	}
 }
 
@@ -237,8 +283,8 @@ function writeTimer(timer) {
 }
 
 function timerEnd() {
-	if (isOneMinute) {
-		isOneMinute = false;
+	if (!isOneMinutePass) {
+		isOneMinutePass = true;
 		timer.setTime(3);
 		timer.startTimer();
 		return;
